@@ -1,7 +1,6 @@
 #ifndef ELEITEM_H
 #define ELEITEM_H
 
-
 #include<QStandardItem>
 
 #include"ele.h"

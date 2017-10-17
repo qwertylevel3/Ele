@@ -15,11 +15,16 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     ele.cpp \
-    eleitem.cpp
+    eleitem.cpp \
+    importdialog.cpp \
+    eledatasetitem.cpp
 
 HEADERS  += mainwindow.h \
     csv.h \
     ele.h \
-    eleitem.h
+    eleitem.h \
+    importdialog.h \
+    eledatasetitem.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    importdialog.ui

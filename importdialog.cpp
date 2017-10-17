@@ -1,0 +1,19 @@
+#include "importdialog.h"
+#include "ui_importdialog.h"
+
+ImportDialog::ImportDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::ImportDialog)
+{
+    ui->setupUi(this);
+}
+
+ImportDialog::~ImportDialog()
+{
+    delete ui;
+}
+
+QString ImportDialog::getDataName()
+{
+    return ui->lineEdit->text();
+}

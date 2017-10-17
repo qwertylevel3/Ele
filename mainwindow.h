@@ -11,17 +11,22 @@ class MainWindow;
 class MainWindow : public QMainWindow
 {
     Q_OBJECT
-
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 public slots:
-    void openFileSlot();
+    void openDataSlot();
+    void importFileSlot();
     void calculate();
 private:
     void open(QString filename);
+    void import(QString dataName,QString fileName);
+    void save();
+    void load();
     Ui::MainWindow *ui;
-    QStandardItemModel* model{nullptr};
+    QStandardItemModel* eleModel{nullptr};
+    QStandardItemModel* eleDataSetModel{nullptr};
+
 };
 
 #endif // MAINWINDOW_H

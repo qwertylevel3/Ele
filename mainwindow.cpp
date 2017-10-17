@@ -5,18 +5,27 @@
 #include"eleitem.h"
 #include"csv.h"
 #include"QTextStream"
+#include"importdialog.h"
+#include"eledatasetitem.h"
+#include"QMessageBox"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    connect(ui->action_O,SIGNAL(triggered(bool)),this,SLOT(openFileSlot()));
+    connect(ui->action_O,SIGNAL(triggered(bool)),this,SLOT(importFileSlot()));
+    connect(ui->dataSetList,SIGNAL(clicked(QModelIndex)),this,SLOT(openDataSlot()));
     connect(ui->listView,SIGNAL(clicked(QModelIndex)),this,SLOT(calculate()));
     connect(ui->k1SpinBox,SIGNAL(valueChanged(double)),this,SLOT(calculate()));
     connect(ui->k2SpinBox,SIGNAL(valueChanged(double)),this,SLOT(calculate()));
     connect(ui->k3SpinBox,SIGNAL(valueChanged(double)),this,SLOT(calculate()));
     connect(ui->k4SpinBox,SIGNAL(valueChanged(double)),this,SLOT(calculate()));
+
+
+    eleDataSetModel=new QStandardItemModel();
+    this->ui->dataSetList->setModel(eleDataSetModel);
+    load();
 }
 
 MainWindow::~MainWindow()
@@ -24,24 +33,43 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
-void MainWindow::openFileSlot()
+void MainWindow::openDataSlot()
+{
+    auto index=ui->dataSetList->currentIndex();
+
+    EleDataSetItem* item=static_cast<EleDataSetItem*>(eleDataSetModel->itemFromIndex(index));
+
+    QString filepath=item->getFilePath();
+    open(filepath);
+
+}
+
+void MainWindow::importFileSlot()
 {
     auto curFile=QFileDialog::getOpenFileName(this,
-                                         tr("Open csv file"),".",
-                                         tr("csv file(*.csv)"));
-    open(curFile);
+                                              tr("Open csv file"),".",
+                                              tr("csv file(*.csv)"));
+    ImportDialog dialog(this);
+    if(dialog.exec())
+    {
+        QString dataName=dialog.getDataName();
+
+        import(dataName,curFile);
+        save();
+    }
+
 }
 
 void MainWindow::calculate()
 {
-    if(!model)
+    if(!eleModel)
     {
         return;
     }
 
     auto index=ui->listView->currentIndex();
 
-    EleItem* item=static_cast<EleItem*>(model->itemFromIndex(index));
+    EleItem* item=static_cast<EleItem*>(eleModel->itemFromIndex(index));
 
     Ele ele=item->getEleData();
 
@@ -82,7 +110,11 @@ void MainWindow::calculate()
 
 void MainWindow::open(QString filename)
 {
-    model=new QStandardItemModel();
+    if(eleModel)
+    {
+        eleModel->clear();
+    }
+    eleModel=new QStandardItemModel();
 
     QFile file(filename);
     QStringList csvList;
@@ -103,7 +135,62 @@ void MainWindow::open(QString filename)
         ele.init(csvList.at(i));
         EleItem* item=new EleItem();
         item->setEleData(ele);
-        model->appendRow(item);
+        eleModel->appendRow(item);
     }
-    ui->listView->setModel(model);
+    ui->listView->setModel(eleModel);
 }
+
+void MainWindow::import(QString dataName, QString fileName)
+{
+    EleDataSetItem* dataSetItem=new EleDataSetItem();
+
+    dataSetItem->setDataName(dataName);
+    dataSetItem->setFilePath(fileName);
+
+    eleDataSetModel->appendRow(dataSetItem);
+
+    ui->dataSetList->setCurrentIndex(dataSetItem->index());
+}
+
+void MainWindow::save()
+{
+    QString dataSetPath="data.db";
+    QFile file(dataSetPath);
+
+    if(!file.open(QIODevice::WriteOnly  | QIODevice::Text))
+    {
+        QMessageBox::warning(this,"sdf","can't open",QMessageBox::Yes);
+    }
+    QTextStream in(&file);
+    for(int i=0;i<eleDataSetModel->rowCount();i++)
+    {
+        EleDataSetItem* item=static_cast<EleDataSetItem*>(eleDataSetModel->item(i));
+        in<<item->getDataName()<<"|"<<item->getFilePath()<<"\n";
+
+    }
+    file.close();
+}
+
+void MainWindow::load()
+{
+    QString dataSetPath="data.db";
+    QFile file(dataSetPath);
+    QStringList dataList;
+    if(file.open(QIODevice::ReadWrite))
+    {
+        QTextStream stream(&file);
+
+        while(!stream.atEnd())
+        {
+            dataList.push_back(stream.readLine());
+        }
+        file.close();
+    }
+
+    for(int i=0;i<dataList.size();i++)
+    {
+        QStringList infoList=dataList.at(i).split("|");
+        import(infoList.at(0),infoList.at(1));
+    }
+}
+
