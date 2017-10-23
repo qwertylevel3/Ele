@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include<QStandardItemModel>
+#include<QSqlTableModel>
 
 namespace Ui {
 class MainWindow;
@@ -25,8 +26,9 @@ private:
     void load();
     Ui::MainWindow *ui;
     QStandardItemModel* eleModel{nullptr};
-    QStandardItemModel* eleDataSetModel{nullptr};
+    QSqlTableModel* dataModel{nullptr};
 
+    QString curEleName;
 };
 
 #endif // MAINWINDOW_H

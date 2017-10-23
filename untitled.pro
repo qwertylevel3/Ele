@@ -6,6 +6,8 @@
 
 QT       += core gui
 
+QT		 += sql
+
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = untitled
@@ -17,14 +19,15 @@ SOURCES += main.cpp\
     ele.cpp \
     eleitem.cpp \
     importdialog.cpp \
-    eledatasetitem.cpp
+    evadialog.cpp
 
 HEADERS  += mainwindow.h \
     csv.h \
     ele.h \
     eleitem.h \
     importdialog.h \
-    eledatasetitem.h
+    evadialog.h
 
 FORMS    += mainwindow.ui \
-    importdialog.ui
+    importdialog.ui \
+    evadialog.ui

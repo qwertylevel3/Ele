@@ -7,204 +7,38 @@
     <x>0</x>
     <y>0</y>
     <width>810</width>
-    <height>441</height>
+    <height>519</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QHBoxLayout" name="horizontalLayout_2">
-    <item>
-     <widget class="QListView" name="dataSetList"/>
-    </item>
+   <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <widget class="QListView" name="listView"/>
     </item>
     <item>
-     <layout class="QVBoxLayout" name="verticalLayout">
+     <layout class="QHBoxLayout" name="horizontalLayout">
       <item>
-       <layout class="QGridLayout" name="gridLayout_2">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label">
-          <property name="text">
-           <string>k1:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLabel" name="label_2">
-          <property name="text">
-           <string>k2:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_3">
-          <property name="text">
-           <string>k3:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QLabel" name="label_4">
-          <property name="text">
-           <string>k4:</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="0">
-         <widget class="QDoubleSpinBox" name="k1SpinBox">
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.250000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QDoubleSpinBox" name="k2SpinBox">
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.250000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="2">
-         <widget class="QDoubleSpinBox" name="k3SpinBox">
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.250000000000000</double>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QDoubleSpinBox" name="k4SpinBox">
-          <property name="singleStep">
-           <double>0.100000000000000</double>
-          </property>
-          <property name="value">
-           <double>0.250000000000000</double>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <spacer name="verticalSpacer">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>40</height>
+          <width>40</width>
+          <height>20</height>
          </size>
         </property>
        </spacer>
       </item>
       <item>
-       <layout class="QGridLayout" name="gridLayout">
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_5">
-          <property name="text">
-           <string>15秒实际电量</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QLineEdit" name="lineEdit15"/>
-        </item>
-        <item row="0" column="2">
-         <widget class="QLabel" name="label_12">
-          <property name="text">
-           <string>15秒理论电量</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <widget class="QLineEdit" name="lineEdit15The"/>
-        </item>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_6">
-          <property name="text">
-           <string>30秒实际电量</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1">
-         <widget class="QLineEdit" name="lineEdit30"/>
-        </item>
-        <item row="1" column="2">
-         <widget class="QLabel" name="label_11">
-          <property name="text">
-           <string>30秒理论电量</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="3">
-         <widget class="QLineEdit" name="lineEdit30The"/>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_7">
-          <property name="text">
-           <string>45秒实际电量</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1">
-         <widget class="QLineEdit" name="lineEdit45"/>
-        </item>
-        <item row="2" column="2">
-         <widget class="QLabel" name="label_10">
-          <property name="text">
-           <string>45秒理论电量</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="3">
-         <widget class="QLineEdit" name="lineEdit45The"/>
-        </item>
-        <item row="3" column="0">
-         <widget class="QLabel" name="label_8">
-          <property name="text">
-           <string>60秒实际电量</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="1">
-         <widget class="QLineEdit" name="lineEdit60"/>
-        </item>
-        <item row="3" column="2">
-         <widget class="QLabel" name="label_9">
-          <property name="text">
-           <string>60秒理论电量</string>
-          </property>
-         </widget>
-        </item>
-        <item row="3" column="3">
-         <widget class="QLineEdit" name="lineEdit60The"/>
-        </item>
-       </layout>
-      </item>
-      <item>
-       <layout class="QHBoxLayout" name="horizontalLayout">
-        <item>
-         <widget class="QLabel" name="label_13">
-          <property name="text">
-           <string>评价指数</string>
-          </property>
-         </widget>
-        </item>
-        <item>
-         <widget class="QLineEdit" name="lineEdit"/>
-        </item>
-       </layout>
+       <widget class="QPushButton" name="pushButton">
+        <property name="text">
+         <string>评价</string>
+        </property>
+       </widget>
       </item>
      </layout>
     </item>

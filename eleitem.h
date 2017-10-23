@@ -9,10 +9,7 @@ class EleItem:public QStandardItem
 {
 public:
     EleItem();
-    void setEleData(Ele e);
-    Ele getEleData();
 protected:
-    Ele eleData;
 };
 
 #endif // ELEITEM_H
