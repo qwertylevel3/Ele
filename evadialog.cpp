@@ -1,6 +1,7 @@
 #include "evadialog.h"
 #include "ui_evadialog.h"
 #include<QSqlRecord>
+#include<QCheckBox>
 #include<QDebug>
 
 
@@ -60,27 +61,25 @@ EvaDialog::EvaDialog(QWidget *parent) :
 {
     ui->setupUi(this);
 
-//    connect(ui->k1SpinBox,SIGNAL(valueChanged(double)),this,SLOT(calculate()));
-//    connect(ui->k2SpinBox,SIGNAL(valueChanged(double)),this,SLOT(calculate()));
-//    connect(ui->k3SpinBox,SIGNAL(valueChanged(double)),this,SLOT(calculate()));
-//    connect(ui->k4SpinBox,SIGNAL(valueChanged(double)),this,SLOT(calculate()));
+    connect(ui->evaButton,SIGNAL(clicked(bool)),this,SLOT(evaluate()));
 
-    //    connect(ui->dateEdit1,SIGNAL(timeChanged(QTime)),this,SLOT(search()));
-    //    connect(ui->dateEdit2,SIGNAL(timeChanged(QTime)),this,SLOT(search()));
-    connect(ui->pushButton_2,SIGNAL(clicked(bool)),this,SLOT(search()));
 
-    QStringList header;
-    header.append("时间");
-    header.append("15秒实际");
-    header.append("15秒理论");
-    header.append("30秒实际");
-    header.append("30秒理论");
-    header.append("45秒实际");
-    header.append("45秒理论");
-    header.append("60秒实际");
-    header.append("60秒理论");
+    ui->evaTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-    ui->tableWidget->setHorizontalHeaderLabels(header);
+//    QStringList header;
+//    header.append("时间");
+//    header.append("15秒实际");
+//    header.append("15秒理论");
+//    header.append("30秒实际");
+//    header.append("30秒理论");
+//    header.append("45秒实际");
+//    header.append("45秒理论");
+//    header.append("60秒实际");
+//    header.append("60秒理论");
+//    header.append("评价指数");
+
+//    ui->tableWidget->setHorizontalHeaderLabels(header);
+
 }
 
 EvaDialog::~EvaDialog()
@@ -88,28 +87,37 @@ EvaDialog::~EvaDialog()
     delete ui;
 }
 
-void EvaDialog::setModel(QSqlTableModel *model)
+void EvaDialog::initModel(QSqlTableModel *model)
 {
     dataModel=model;
+    initListWidget();
 }
 
-void EvaDialog::setEleName(QString name)
+void EvaDialog::evaluate()
 {
-    eleName=name;
-}
-
-void EvaDialog::search()
-{
-    int temp=ui->tableWidget->rowCount();
+    //clear
+    int temp=ui->evaTable->rowCount();
 
     for(int i=0;i<temp;i++)
     {
-        ui->tableWidget->removeRow(0);
+        ui->evaTable->removeRow(0);
     }
-
 
     dataModel->select();
 
+
+    //get all ele name
+    QList<QString> eleNameList;
+
+    for(int i=0;i<ui->eleTable->rowCount();i++)
+    {
+        if(ui->eleTable->item(i,0)->checkState()==Qt::Checked)
+        {
+            eleNameList.push_back(ui->eleTable->item(i,1)->text());
+        }
+    }
+
+    //get data range
     QDate date1=ui->dateEdit1->date();
     QDate date2=ui->dateEdit2->date();
 
@@ -120,6 +128,23 @@ void EvaDialog::search()
     d2.init(date2);
 
 
+    //计算每个待评价机组的评价指数
+
+    for(int i=0;i<eleNameList.size();i++)
+    {
+        double value=evaluate(eleNameList.at(i),d1,d2);
+
+        ui->evaTable->insertRow(i);
+
+        ui->evaTable->setItem(i,0,new QTableWidgetItem(eleNameList.at(i)));
+        ui->evaTable->setItem(i,1,new QTableWidgetItem(QString::number(value)));
+    }
+}
+
+
+double EvaDialog::evaluate(const QString &eleName,SimpleDate d1,SimpleDate d2)
+{
+    double result=0.0;
     int count=0;
 
     for(int i=0;i<dataModel->rowCount();i++)
@@ -138,89 +163,76 @@ void EvaDialog::search()
 
         if(d.inRange(d1,d2))
         {
-            QStandardItem* row=new QStandardItem();
+            double r15=(dataModel->record(i)).value("15秒实际贡献电量").toDouble();
+            double t15=(dataModel->record(i)).value("15秒理论贡献电量").toDouble();
+            double r30=(dataModel->record(i)).value("30秒实际贡献电量").toDouble();
+            double t30=(dataModel->record(i)).value("15秒理论贡献电量").toDouble();
+            double r45=(dataModel->record(i)).value("45秒实际贡献电量").toDouble();
+            double t45=(dataModel->record(i)).value("15秒理论贡献电量").toDouble();
+            double r60=(dataModel->record(i)).value("60秒实际贡献电量").toDouble();
+            double t60=(dataModel->record(i)).value("15秒理论贡献电量").toDouble();
 
-            QString strR15=(dataModel->record(i)).value("15秒实际贡献电量").toString();
-            QString strT15=(dataModel->record(i)).value("15秒理论贡献电量").toString();
-            QString strR30=(dataModel->record(i)).value("30秒实际贡献电量").toString();
-            QString strT30=(dataModel->record(i)).value("15秒理论贡献电量").toString();
-            QString strR45=(dataModel->record(i)).value("45秒实际贡献电量").toString();
-            QString strT45=(dataModel->record(i)).value("15秒理论贡献电量").toString();
-            QString strR60=(dataModel->record(i)).value("60秒实际贡献电量").toString();
-            QString strT60=(dataModel->record(i)).value("15秒理论贡献电量").toString();
+            double tempValue=evaluate(r15,t15,r30,t30,r45,t45,r60,t60);
 
-            QTableWidgetItem* dateTimeItem=new QTableWidgetItem();
-            dateTimeItem->setText(dateTime);
-
-            QTableWidgetItem* r15=new QTableWidgetItem();
-            r15->setText(strR15);
-            QTableWidgetItem* t15=new QTableWidgetItem();
-            t15->setText(strT15);
-            QTableWidgetItem* r30=new QTableWidgetItem();
-            r30->setText(strR30);
-            QTableWidgetItem* t30=new QTableWidgetItem();
-            t30->setText(strT30);
-            QTableWidgetItem* r45=new QTableWidgetItem();
-            r45->setText(strR45);
-            QTableWidgetItem* t45=new QTableWidgetItem();
-            t45->setText(strT45);
-            QTableWidgetItem* r60=new QTableWidgetItem();
-            r60->setText(strR60);
-            QTableWidgetItem* t60=new QTableWidgetItem();
-            t60->setText(strT60);
-
-            ui->tableWidget->insertRow(count);
-
-            ui->tableWidget->setItem(count,0,dateTimeItem);
-            ui->tableWidget->setItem(count,1,r15);
-            ui->tableWidget->setItem(count,2,t15);
-            ui->tableWidget->setItem(count,3,r30);
-            ui->tableWidget->setItem(count,4,t30);
-            ui->tableWidget->setItem(count,5,r45);
-            ui->tableWidget->setItem(count,6,t45);
-            ui->tableWidget->setItem(count,7,r60);
-            ui->tableWidget->setItem(count,8,t60);
+            result+=tempValue;
 
             count++;
-
         }
     }
-    calculate();
+
+
+    return count==0?0:(result/count);
 }
 
-void EvaDialog::calculate()
+void EvaDialog::initListWidget()
 {
-    int sumCount=0;
-    int goodCount=0;
+//    QListWidgetItem * item = new QListWidgetItem ();
+//    QCheckBox * box = new QCheckBox();
+//    box->setCheckable(true);
+//    ui->listWidget->addItem(item);
+//    ui->listWidget->setItemWidget(item,box);
 
-    int temp=ui->tableWidget->rowCount();
-    qDebug()<<temp;
 
-    for(int i=0;i<ui->tableWidget->rowCount();i++)
+    //clear
+    int temp=ui->eleTable->rowCount();
+
+    for(int i=0;i<temp;i++)
     {
-        double r15=ui->tableWidget->item(i,1)->text().toDouble();
-        double t15=ui->tableWidget->item(i,2)->text().toDouble();
-        double r30=ui->tableWidget->item(i,3)->text().toDouble();
-        double t30=ui->tableWidget->item(i,4)->text().toDouble();
-        double r45=ui->tableWidget->item(i,5)->text().toDouble();
-        double t45=ui->tableWidget->item(i,6)->text().toDouble();
-        double r60=ui->tableWidget->item(i,7)->text().toDouble();
-        double t60=ui->tableWidget->item(i,8)->text().toDouble();
-
-        double value=evaluate(r15,t15,r30,t30,r45,t45,r60,t60);
-
-        if(value>0.6)
-        {
-            goodCount++;
-        }
-        sumCount++;
+        ui->eleTable->removeRow(0);
     }
 
-    double per=double(goodCount)/double(sumCount);
+    dataModel->select();
 
-    ui->lineEdit1->setText(QString::number(sumCount));
-    ui->lineEdit2->setText(QString::number(sumCount));
-    ui->lineEdit3->setText(QString::number(per));
+
+
+    QSet<QString> tag;
+    for(int i=0;i<dataModel->rowCount();i++)
+    {
+        QString name=(dataModel->record(i)).value("机组名称").toString();
+        if(!tag.contains(name))
+        {
+            tag.insert(name);
+        }
+    }
+
+    int count=0;
+    auto iter=tag.begin();
+    while(iter!=tag.end())
+    {
+        QTableWidgetItem* checkBoxItem=new QTableWidgetItem();
+        checkBoxItem->setCheckState(Qt::Unchecked);
+
+        QTableWidgetItem* item=new QTableWidgetItem();
+        item->setText(*iter);
+
+        ui->eleTable->insertRow(count);
+
+        ui->eleTable->setItem(count,0,checkBoxItem);
+        ui->eleTable->setItem(count,1,item);
+
+        iter++;
+        count++;
+    }
 }
 
 double EvaDialog::evaluate(double r15, double t15, double r30, double t30, double r45, double t45, double r60, double t60)

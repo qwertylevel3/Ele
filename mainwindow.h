@@ -16,16 +16,21 @@ public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
 public slots:
-    void openDataSlot();
-    void importFileSlot();
     void calculate();
+
+    void importSlot();
+    void quitSlot();
+
+    void newDBSlot();
+    void openDBSlot();
+    void closeDBSlot();
+
+    void evaSlot();
 private:
-    void open(QString filename);
-    void import(QString dataName,QString fileName);
-    void save();
-    void load();
+    void initDB(const QString& dbname);
+    void initTableWidget();
+    void load(const QString& dbname);
     Ui::MainWindow *ui;
-    QStandardItemModel* eleModel{nullptr};
     QSqlTableModel* dataModel{nullptr};
 
     QString curEleName;

@@ -36,13 +36,12 @@ public:
     explicit EvaDialog(QWidget *parent = 0);
     ~EvaDialog();
 
-    void setModel(QSqlTableModel* model);
-    void setEleName(QString name);
-
+    void initModel(QSqlTableModel* model);
 public slots:
-    void search();
-    void calculate();
+    void evaluate();
 private:
+    double evaluate(const QString& eleName,SimpleDate d1,SimpleDate d2);
+    void initListWidget();
     //获取某一天的评价指数
     double evaluate(double r15,double t15,
                     double r30,double t30,
@@ -52,8 +51,8 @@ private:
     Ui::EvaDialog *ui;
 
     QSqlTableModel* dataModel{nullptr};
-    QString eleName;
 
+    QString eleName;
 };
 
 #endif // EVADIALOG_H

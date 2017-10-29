@@ -6,41 +6,77 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>810</width>
-    <height>519</height>
+    <width>916</width>
+    <height>571</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralWidget">
-   <layout class="QVBoxLayout" name="verticalLayout">
+   <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="QListView" name="listView"/>
-    </item>
-    <item>
-     <layout class="QHBoxLayout" name="horizontalLayout">
-      <item>
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item>
-       <widget class="QPushButton" name="pushButton">
-        <property name="text">
-         <string>评价</string>
-        </property>
-       </widget>
-      </item>
-     </layout>
+     <widget class="QTableWidget" name="tableWidget">
+      <property name="sizeAdjustPolicy">
+       <enum>QAbstractScrollArea::AdjustIgnored</enum>
+      </property>
+      <attribute name="horizontalHeaderCascadingSectionResizes">
+       <bool>false</bool>
+      </attribute>
+      <attribute name="verticalHeaderCascadingSectionResizes">
+       <bool>false</bool>
+      </attribute>
+      <column>
+       <property name="text">
+        <string>机组名称</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>响应时间</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>15秒实际电量</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>15秒理论电量</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>30秒实际电量</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>30秒理论电量</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>45秒实际电量</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>45秒理论电量</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>60秒实际电量</string>
+       </property>
+      </column>
+      <column>
+       <property name="text">
+        <string>60秒理论电量</string>
+       </property>
+      </column>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -49,20 +85,36 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>810</width>
+     <width>916</width>
      <height>23</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu_F">
     <property name="title">
-     <string>文件(F)</string>
+     <string>文件</string>
     </property>
-    <addaction name="action_O"/>
-    <addaction name="action_C"/>
+    <addaction name="actionNew"/>
+    <addaction name="actionOpen"/>
+    <addaction name="actionClose"/>
     <addaction name="separator"/>
-    <addaction name="action_Q"/>
+    <addaction name="actionImport"/>
+    <addaction name="separator"/>
+    <addaction name="actionQuit"/>
+   </widget>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>数据分析</string>
+    </property>
+    <addaction name="actionEva"/>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>报表生成</string>
+    </property>
    </widget>
    <addaction name="menu_F"/>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -73,19 +125,40 @@
    </attribute>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
-  <action name="action_O">
+  <action name="actionImport">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
-    <string>导入</string>
+    <string>导入数据</string>
    </property>
   </action>
-  <action name="action_Q">
+  <action name="actionQuit">
    <property name="text">
     <string>退出(Q)</string>
    </property>
   </action>
-  <action name="action_C">
+  <action name="actionEva">
    <property name="text">
-    <string>关闭(C)</string>
+    <string>一次调频性能分析</string>
+   </property>
+  </action>
+  <action name="actionNew">
+   <property name="text">
+    <string>新建数据库</string>
+   </property>
+  </action>
+  <action name="actionOpen">
+   <property name="text">
+    <string>打开数据库</string>
+   </property>
+  </action>
+  <action name="actionClose">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>关闭数据库</string>
    </property>
   </action>
  </widget>
