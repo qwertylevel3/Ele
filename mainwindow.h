@@ -26,6 +26,8 @@ public slots:
     void closeDBSlot();
 
     void evaSlot();
+    void atrSlot();
+    void evaRepSlot();
 private:
     void initDB(const QString& dbname);
     void initTableWidget();

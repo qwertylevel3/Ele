@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>EvaDialog</class>
- <widget class="QDialog" name="EvaDialog">
+ <class>AtrDialog</class>
+ <widget class="QDialog" name="AtrDialog">
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>892</width>
-    <height>591</height>
+    <width>879</width>
+    <height>596</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>一次调频性能分析</string>
+   <string>闭锁故障性能分析</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
@@ -62,6 +62,33 @@
              </date>
             </property>
            </widget>
+          </item>
+         </layout>
+        </item>
+        <item>
+         <layout class="QHBoxLayout" name="horizontalLayout_3">
+          <item>
+           <widget class="QLabel" name="label_3">
+            <property name="text">
+             <string>频率下跌</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QDoubleSpinBox" name="doubleSpinBox"/>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_3">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -255,16 +282,16 @@
   <connection>
    <sender>pushButton</sender>
    <signal>clicked(bool)</signal>
-   <receiver>EvaDialog</receiver>
+   <receiver>AtrDialog</receiver>
    <slot>close()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>844</x>
-     <y>569</y>
+     <x>831</x>
+     <y>574</y>
     </hint>
     <hint type="destinationlabel">
-     <x>445</x>
-     <y>295</y>
+     <x>439</x>
+     <y>297</y>
     </hint>
    </hints>
   </connection>

@@ -19,15 +19,28 @@ SOURCES += main.cpp\
     ele.cpp \
     eleitem.cpp \
     importdialog.cpp \
-    evadialog.cpp
+    evadialog.cpp \
+    atrdialog.cpp \
+    simpledate.cpp \
+    util.cpp \
+    evarepdialog.cpp \
+    repdialog.cpp
 
 HEADERS  += mainwindow.h \
     csv.h \
     ele.h \
     eleitem.h \
     importdialog.h \
-    evadialog.h
+    evadialog.h \
+    atrdialog.h \
+    simpledate.h \
+    util.h \
+    evarepdialog.h \
+    repdialog.h
 
 FORMS    += mainwindow.ui \
     importdialog.ui \
-    evadialog.ui
+    evadialog.ui \
+    atrdialog.ui \
+    evarepdialog.ui \
+    repdialog.ui

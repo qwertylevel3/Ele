@@ -12,6 +12,8 @@
 #include<QDebug>
 #include<QSqlRecord>
 #include<evadialog.h>
+#include"atrdialog.h"
+#include"evarepdialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
         QMainWindow(parent),
@@ -26,6 +28,9 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(ui->actionClose,SIGNAL(triggered(bool)),this,SLOT(closeDBSlot()));
 
     connect(ui->actionEva,SIGNAL(triggered(bool)),this,SLOT(evaSlot()));
+    connect(ui->actionAtr,SIGNAL(triggered(bool)),this,SLOT(atrSlot()));
+    connect(ui->actionEvaRep,SIGNAL(triggered(bool)),this,SLOT(evaRepSlot()));
+
 
    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
@@ -64,6 +69,8 @@ void MainWindow::openDBSlot()
     ui->actionImport->setEnabled(true);
     ui->actionClose->setEnabled(true);
     ui->actionEva->setEnabled(true);
+    ui->actionAtr->setEnabled(true);
+    ui->actionEvaRep->setEnabled(true);
 }
 
 void MainWindow::closeDBSlot()
@@ -76,6 +83,12 @@ void MainWindow::closeDBSlot()
     ui->actionImport->setEnabled(false);
     ui->actionClose->setEnabled(false);
     ui->actionEva->setEnabled(false);
+    ui->actionAtr->setEnabled(false);
+    ui->actionEvaRep->setEnabled(false);
+
+    QMessageBox msgBox;
+    msgBox.setText("数据库已关闭");
+    msgBox.exec();
 }
 
 void MainWindow::evaSlot()
@@ -86,6 +99,23 @@ void MainWindow::evaSlot()
     dialog.initModel(dataModel);
 
     dialog.exec();
+}
+
+void MainWindow::atrSlot()
+{
+    dataModel->select();
+
+    AtrDialog dialog;
+    dialog.initModel(dataModel);
+
+    dialog.exec();
+}
+
+void MainWindow::evaRepSlot()
+{
+   EvaRepDialog dialog;
+   dialog.setModel(dataModel);
+   dialog.exec();
 }
 
 void MainWindow::initDB(const QString &dbname)
@@ -197,6 +227,9 @@ void MainWindow::initTableWidget()
 void MainWindow::load(const QString &dbname)
 {
     initDB(dbname);
-    initTableWidget();
+//    initTableWidget();
+    QMessageBox msgBox;
+    msgBox.setText("数据库已打开");
+    msgBox.exec();
 }
 

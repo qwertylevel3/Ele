@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>一次调频分析器</string>
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
@@ -26,56 +26,6 @@
       <attribute name="verticalHeaderCascadingSectionResizes">
        <bool>false</bool>
       </attribute>
-      <column>
-       <property name="text">
-        <string>机组名称</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>响应时间</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>15秒实际电量</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>15秒理论电量</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>30秒实际电量</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>30秒理论电量</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>45秒实际电量</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>45秒理论电量</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>60秒实际电量</string>
-       </property>
-      </column>
-      <column>
-       <property name="text">
-        <string>60秒理论电量</string>
-       </property>
-      </column>
      </widget>
     </item>
    </layout>
@@ -106,15 +56,24 @@
      <string>数据分析</string>
     </property>
     <addaction name="actionEva"/>
+    <addaction name="actionAtr"/>
    </widget>
    <widget class="QMenu" name="menu_2">
     <property name="title">
      <string>报表生成</string>
     </property>
+    <addaction name="actionEvaRep"/>
+   </widget>
+   <widget class="QMenu" name="menu_3">
+    <property name="title">
+     <string>帮助</string>
+    </property>
+    <addaction name="action"/>
    </widget>
    <addaction name="menu_F"/>
    <addaction name="menu"/>
    <addaction name="menu_2"/>
+   <addaction name="menu_3"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
    <attribute name="toolBarArea">
@@ -139,6 +98,9 @@
    </property>
   </action>
   <action name="actionEva">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>一次调频性能分析</string>
    </property>
@@ -161,8 +123,51 @@
     <string>关闭数据库</string>
    </property>
   </action>
+  <action name="actionAtr">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>闭锁故障评价分析</string>
+   </property>
+  </action>
+  <action name="actionEvaRep">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="text">
+    <string>一次调频报表生成</string>
+   </property>
+  </action>
+  <action name="actionAtrRep">
+   <property name="text">
+    <string>闭锁故障报表生成</string>
+   </property>
+  </action>
+  <action name="action">
+   <property name="text">
+    <string>关于</string>
+   </property>
+  </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>actionQuit</sender>
+   <signal>toggled(bool)</signal>
+   <receiver>MainWindow</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>457</x>
+     <y>285</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>

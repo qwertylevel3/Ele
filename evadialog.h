@@ -4,28 +4,12 @@
 #include <QDialog>
 #include<QSqlTableModel>
 #include<QStandardItemModel>
+#include"simpledate.h"
 
 namespace Ui {
 class EvaDialog;
 }
 
-
-
-struct SimpleDate
-{
-    void init(const QString& s);
-    void init(const QDate& date);
-
-    int y;
-    int m;
-    int d;
-
-
-
-    bool inRange(SimpleDate d1,SimpleDate d2);
-
-    bool lessEqual(SimpleDate d);
-};
 
 class EvaDialog : public QDialog
 {

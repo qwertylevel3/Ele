@@ -1,16 +1,13 @@
-#include "evadialog.h"
-#include "ui_evadialog.h"
+#include "atrdialog.h"
+#include "ui_atrdialog.h"
+#include"util.h"
 #include<QSqlRecord>
 #include<QCheckBox>
-#include<QDebug>
 
 
-
-
-
-EvaDialog::EvaDialog(QWidget *parent) :
+AtrDialog::AtrDialog(QWidget *parent) :
         QDialog(parent),
-        ui(new Ui::EvaDialog)
+        ui(new Ui::AtrDialog)
 {
     ui->setupUi(this);
 
@@ -19,34 +16,20 @@ EvaDialog::EvaDialog(QWidget *parent) :
 
     ui->evaTable->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 
-//    QStringList header;
-//    header.append("时间");
-//    header.append("15秒实际");
-//    header.append("15秒理论");
-//    header.append("30秒实际");
-//    header.append("30秒理论");
-//    header.append("45秒实际");
-//    header.append("45秒理论");
-//    header.append("60秒实际");
-//    header.append("60秒理论");
-//    header.append("评价指数");
-
-//    ui->tableWidget->setHorizontalHeaderLabels(header);
-
 }
 
-EvaDialog::~EvaDialog()
+AtrDialog::~AtrDialog()
 {
     delete ui;
 }
 
-void EvaDialog::initModel(QSqlTableModel *model)
+void AtrDialog::initModel(QSqlTableModel *model)
 {
     dataModel=model;
     initListWidget();
 }
 
-void EvaDialog::evaluate()
+void AtrDialog::evaluate()
 {
     //clear
     int temp=ui->evaTable->rowCount();
@@ -92,10 +75,10 @@ void EvaDialog::evaluate()
         ui->evaTable->setItem(i,0,new QTableWidgetItem(eleNameList.at(i)));
         ui->evaTable->setItem(i,1,new QTableWidgetItem(QString::number(value)));
     }
+
 }
 
-
-double EvaDialog::evaluate(const QString &eleName,SimpleDate d1,SimpleDate d2)
+double AtrDialog::evaluate(const QString &eleName, SimpleDate d1, SimpleDate d2)
 {
     double result=0.0;
     int count=0;
@@ -114,7 +97,11 @@ double EvaDialog::evaluate(const QString &eleName,SimpleDate d1,SimpleDate d2)
         SimpleDate d;
         d.init(date);
 
-        if(d.inRange(d1,d2))
+        double freDiff=-(dataModel->record(i)).value("频差极值").toDouble();
+
+        double freThreshold=ui->doubleSpinBox->value();
+
+        if(d.inRange(d1,d2) && freDiff>freThreshold)
         {
             double r15=(dataModel->record(i)).value("15秒实际贡献电量").toDouble();
             double t15=(dataModel->record(i)).value("15秒理论贡献电量").toDouble();
@@ -124,26 +111,30 @@ double EvaDialog::evaluate(const QString &eleName,SimpleDate d1,SimpleDate d2)
             double t45=(dataModel->record(i)).value("15秒理论贡献电量").toDouble();
             double r60=(dataModel->record(i)).value("60秒实际贡献电量").toDouble();
             double t60=(dataModel->record(i)).value("15秒理论贡献电量").toDouble();
+            double k1=ui->k1SpinBox->value();
+            double k2=ui->k2SpinBox->value();
+            double k3=ui->k3SpinBox->value();
+            double k4=ui->k4SpinBox->value();
 
-            double tempValue=evaluate(r15,t15,r30,t30,r45,t45,r60,t60);
+            double tempValue=Util::evaluate(
+                                    k1,k2,k3,k4,
+                                    r15,t15,r30,t30,r45,t45,r60,t60);
 
             result+=tempValue;
 
             count++;
         }
     }
-
-
     return count==0?0:(result/count);
 }
 
-void EvaDialog::initListWidget()
+void AtrDialog::initListWidget()
 {
-//    QListWidgetItem * item = new QListWidgetItem ();
-//    QCheckBox * box = new QCheckBox();
-//    box->setCheckable(true);
-//    ui->listWidget->addItem(item);
-//    ui->listWidget->setItemWidget(item,box);
+    //    QListWidgetItem * item = new QListWidgetItem ();
+    //    QCheckBox * box = new QCheckBox();
+    //    box->setCheckable(true);
+    //    ui->listWidget->addItem(item);
+    //    ui->listWidget->setItemWidget(item,box);
 
 
     //clear
@@ -186,20 +177,4 @@ void EvaDialog::initListWidget()
         iter++;
         count++;
     }
-}
-
-double EvaDialog::evaluate(double r15, double t15, double r30, double t30, double r45, double t45, double r60, double t60)
-{
-    double k1=ui->k1SpinBox->value();
-    double k2=ui->k2SpinBox->value();
-    double k3=ui->k3SpinBox->value();
-    double k4=ui->k4SpinBox->value();
-
-
-    double value1=(t15==0?0:(r15/t15));
-    double value2=(t30==0?0:(r30/t30));
-    double value3=(t45==0?0:(r45/t45));
-    double value4=(t60==0?0:(r60/t60));
-
-    return k1*value1+k2*value2+k3*value3+k4*value4;
 }
